@@ -1,0 +1,23 @@
+@import '../../styles/variables';
+
+.body{
+    
+    position: relative;
+    background: linear-gradient(116.77deg,  $backgroundGradient1  -46.19%,  $backgroundGradient2 100%);
+    color: var(--backgoundLight);
+    height: 100vh;
+      
+}
+
+.header{
+    padding: 2rem 2rem; 
+    .containerHeader{
+        margin: 0px;
+    }
+    h1{
+        font-size: 28px;
+        font-weight: 600;
+        margin: 0px;
+    }
+
+}
