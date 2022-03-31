@@ -18,14 +18,14 @@ export default function Home() {
     <div className={styles.body}>
       <header className={styles.header}>
         <div className={styles.containerHeader}>
-          <h1>Desafio PontoTel</h1>
+          <h1>Bem vindo, visitante</h1>
         </div>
 
       </header>
       <section className={styles.sectionLogin}>
         <div className={styles.containerLogin}>
           <div className={styles.headerLogin}>
-            <h2>Bem vindo, visitante</h2>
+            <h2>Desafio PontoTel</h2>
             <h2>Login</h2>
           </div>
           <form id="formLogin" className={styles.form}>
