@@ -1,24 +1,22 @@
 import styles from './styles.module.scss';
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/userContext";
-import { auth } from '../../controller/userController';
+import { auth, getNome } from '../../controller/userController';
 import { useRouter } from 'next/router';
+import Header from '../../components/headerComponent';
 
 export default function Main() {
-    const { currentUser, setIsLogged, isLogged } = useContext(UserContext);
+    const { setIsLogged, isLogged } = useContext(UserContext);
+
     const router = useRouter();
 
     auth(router, setIsLogged);
+        
     {
         if (isLogged) {
             return (
                 <div className={styles.body}>
-                    <header className={styles.header}>
-                        <div className={styles.containerHeader}>
-                            <h1>Bem vindo, {currentUser.nome}</h1>
-
-                        </div>
-                    </header>
+                    <Header/>
                 </div>
             );
         } else {

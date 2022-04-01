@@ -257,8 +257,8 @@ export default function Main() {
                                 >Cadastrar</button>
                             </div>
                             <p>
-                                <Link href={'/register'}>
-                                    Voltar
+                                <Link className={styles.linkVoltar} href={'/'}>
+                                    Voltar para login
                                 </Link>
                             </p>
                         </div>

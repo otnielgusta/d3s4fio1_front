@@ -11,14 +11,15 @@ export default function Home() {
 
   const [usuario, setUsuario] = useState('');
   const [senha, setSenha] = useState('');
+  const [option, setOption] = useState('E-Mail');
 
-  const { setCurrentUser } = useContext(UserContext);
 
   return (
     <div className={styles.body}>
       <header className={styles.header}>
         <div className={styles.containerHeader}>
-          <h1>Bem vindo, visitante</h1>
+          <h1>Olá, visitante</h1>
+         
         </div>
 
       </header>
@@ -31,8 +32,13 @@ export default function Home() {
           <form id="formLogin" className={styles.form}>
             <div className={styles.formContainer}>
 
-              <div>
+              <div className={styles.usuario}>
                 <label>PIS, CPF ou e-mail</label>
+                <select onChange={(value)=>setOption(value.target.value)} >
+                  <option>E-Mail</option>
+                  <option>CPF</option>
+                  <option>PIS</option>
+                </select>
                 <input
                   type="text"
                   id="login"
@@ -65,7 +71,7 @@ export default function Home() {
                   type="submit"
                   onClick={(e) => {
                     e.preventDefault();
-                    login(setCurrentUser, router, usuario, senha);
+                    login(router, usuario, senha, option);
                   }}
                 >Logar</button>
               </div>
