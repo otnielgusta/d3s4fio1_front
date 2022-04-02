@@ -2,10 +2,12 @@ import styles from './styles.module.scss';
 import Link from 'next/link';
 
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import {register} from '../../controller/userController'
+import { useState, useContext } from 'react';
+import { register, getAlreadyUser } from '../../controller/userController'
+import { UserContext } from '../../contexts/userContext';
 
 export default function Main() {
+    const {statusCode, setStatusCode} = useContext(UserContext)
     const router = useRouter();
     const [user, setUser] = useState({
         nome: "",
@@ -21,6 +23,96 @@ export default function Main() {
         numero: "",
         complemento: "",
     })
+
+    async function setEnable() {
+        if (user.nome == "" || user.email == "" || user.cpf == "" || user.pis == "" || user.pais == "" || user.estado == "" || user.municipio == "" || user.cep == "" || user.rua == "" || user.numero == "" || user.senha == "") {
+            await swal({
+                title: "Preencha todos os campos!",
+                text: " ",
+                icon: "warning",
+                buttons: {
+                    visible: false
+                },
+                timer: 1500
+
+            })
+            if (user.nome == "") {
+                document.getElementById("nome").style.border = "solid 2px red";
+            } else {
+                document.getElementById("nome").style.border = "none";
+
+            }
+            if (user.email == "") {
+                document.getElementById("email").style.border = "solid 2px red";
+            } else {
+                document.getElementById("email").style.border = "none";
+
+            }
+            if (user.cpf == "") {
+                document.getElementById("cpf").style.border = "solid 2px red";
+            } else {
+                document.getElementById("cpf").style.border = "none";
+
+            }
+            if (user.pis == "") {
+                document.getElementById("pis").style.border = "solid 2px red";
+            } else {
+                document.getElementById("pis").style.border = "none";
+
+            }
+            if (user.pais == "") {
+                document.getElementById("pais").style.border = "solid 2px red";
+            } else {
+                document.getElementById("pais").style.border = "none";
+
+            }
+            if (user.estado == "") {
+                document.getElementById("estado").style.border = "solid 2px red";
+            } else {
+                document.getElementById("estado").style.border = "none";
+
+            }
+            if (user.municipio == "") {
+                document.getElementById("municipio").style.border = "solid 2px red";
+            } else {
+                document.getElementById("municipio").style.border = "none";
+
+            }
+            if (user.cep == "") {
+                document.getElementById("cep").style.border = "solid 2px red";
+            } else {
+                document.getElementById("cep").style.border = "none";
+
+            }
+            if (user.rua == "") {
+                document.getElementById("rua").style.border = "solid 2px red";
+            } else {
+                document.getElementById("rua").style.border = "none";
+
+            }
+            if (user.numero == "") {
+                document.getElementById("numero").style.border = "solid 2px red";
+            } else {
+                document.getElementById("numero").style.border = "none";
+
+            }
+            if (user.senha == "") {
+                document.getElementById("password").style.border = "solid 2px red";
+            } else {
+                document.getElementById("password").style.border = "none";
+
+            }
+
+        } else {
+            await getAlreadyUser(statusCode, setStatusCode, user.email, user.cpf, user.pis);
+            
+            if (statusCode == 404) {
+                console.log("entrou")
+                register(router, user);
+
+            }
+        }
+    }
 
 
     return (
@@ -251,8 +343,7 @@ export default function Main() {
                                     type="submit"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        register(router, user);
-                                        
+                                        setEnable();
                                     }}
                                 >Cadastrar</button>
                             </div>

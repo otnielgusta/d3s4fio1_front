@@ -4,25 +4,24 @@ import swal from 'sweetalert';
 module.exports = {
 
   async login(router, usuario, senha, option) {
-    console.log(option)
     var body;
     if (option == "E-Mail") {
       body = {
         email: usuario,
         senha: senha
       };
-    }else if(option == "CPF"){
+    } else if (option == "CPF") {
       body = {
         cpf: usuario,
         senha: senha
       };
-    }else{
+    } else {
       body = {
         pis: usuario,
         senha: senha
       };
     }
-     
+
 
     let config = {
       method: 'POST',
@@ -56,6 +55,8 @@ module.exports = {
 
       await swal({
         title: "Senha incorreta!",
+        text: " ",
+
         icon: "error",
         dangerMode: true,
       })
@@ -140,6 +141,7 @@ module.exports = {
 
       await swal({
         title: "Senha incorreta!",
+        text: " ",
         icon: "error",
         dangerMode: true,
       })
@@ -175,7 +177,8 @@ module.exports = {
 
     if (response.status == 200) {
       await swal({
-        text: "Cadastro realizado",
+        title: "Cadastro realizado",
+        text: " ",
         icon: "success",
 
         buttons: {
@@ -273,7 +276,7 @@ module.exports = {
 
   },
 
-  async deleteUser(router){
+  async deleteUser(router) {
     const session_token = cookie.get("session_token");
     let config = {
       method: 'POST',
@@ -286,9 +289,10 @@ module.exports = {
 
     const response = await fetch("http://127.0.0.1:5000/auth/delete", config);
 
-    if(response.status == 200){
+    if (response.status == 200) {
       await swal({
-        text: "Conta removida",
+        title: "Conta removida",
+        text: " ",
         icon: "success",
 
         buttons: {
@@ -301,7 +305,7 @@ module.exports = {
         pathname: '/',
 
       });
-    }else{
+    } else {
       await swal({
         text: "Ocorreu um erro",
         icon: "error",
@@ -312,8 +316,62 @@ module.exports = {
         timer: 1500
       });
     }
-  }
+  },
 
+  async getAlreadyUser(statusCode, setStatusCode, email, cpf, pis) {
+    var body = {
+      email: email,
+      cpf: cpf,
+      pis: pis
+    };
+
+    let config = {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+
+    await fetch("http://127.0.0.1:5000/login/already", config)
+      .then((response) => {
+        setStatusCode(response.status)
+        console.log(statusCode)
+        return response.json();
+      })
+      .then((data) => {
+        if (statusCode == 200) {
+          swal({
+            title: data.text,
+            text: " ",
+
+            icon: "error",
+            dangerMode: false,
+          })
+          return 200;
+
+        } else if (statusCode == 404) {
+
+          return 404;
+
+        } else if (statusCode == 401) {
+          swal({
+            title: "Ocorreu um erro!",
+            text: " ",
+
+            icon: "error",
+            dangerMode: true,
+          })
+          return 401;
+        }
+      })
+
+
+
+
+
+  }
 
 
 

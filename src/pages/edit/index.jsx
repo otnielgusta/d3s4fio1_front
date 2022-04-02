@@ -1,14 +1,16 @@
 import styles from './styles.module.scss';
 import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/userContext";
-import { auth, updateUser, deleteUser } from '../../controller/userController';
+import { auth, updateUser, deleteUser, getAlreadyUser } from '../../controller/userController';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Header from '../../components/headerComponent';
 import swal from 'sweetalert';
 
 export default function Main() {
-    const {setIsLogged, isLogged} = useContext(UserContext);
+    const {statusCode, setStatusCode} = useContext(UserContext)
+
+    const { setIsLogged, isLogged } = useContext(UserContext);
     const router = useRouter();
     const [user, setUser] = useState({});
     const [endereco, setEndereco] = useState({});
@@ -16,47 +18,128 @@ export default function Main() {
     const [password, setPassword] = useState("");
 
     auth(router, setIsLogged);
-   
-    useEffect(()=>{
+
+    useEffect(() => {
         if (window.localStorage.getItem("currentUser")) {
-            
+
             setUser(JSON.parse(window.localStorage.getItem("currentUser")));
             setEndereco(JSON.parse(window.localStorage.getItem("currentUser")).endereco);
-            
+
         }
-        
+
         document.getElementById("buttonAlter").style.display = 'none';
 
-    },[router.pathname])
+    }, [router.pathname])
 
-   async function isDelete(){
+    async function isDelete() {
         await swal({
-            title:"Atenção",
+            title: "Atenção",
             text: "Deseja realmente apagar essa conta?",
             icon: "warning",
             buttons: [
                 'Não, cancele isso!',
                 'Sim, eu quero!'
-              ],
-              dangerMode: true,
-        }).then((isConfirm)=>{
+            ],
+            dangerMode: true,
+        }).then((isConfirm) => {
             if (isConfirm) {
                 deleteUser(router);
             }
         })
     }
 
-    function alter(){
+    function alter() {
         const input = document.getElementById("buttonAlter");
         if (alterPassword) {
             input.style.display = 'none';
             setAlterPassword(false);
-        }else{
+        } else {
             input.style.display = '';
             setAlterPassword(true);
         }
     }
 
+    async function setEnable() {
+        if (user.nome == "" || user.email == "" || user.cpf == "" || user.pis == "" || endereco.pais == "" || endereco.estado == "" || endereco.municipio == "" || endereco.cep == "" || endereco.rua == "" || endereco.numero == "") {
+            await swal({
+                title: "Preencha todos os campos!",
+                text: " ",
+                icon: "warning",
+                buttons: {
+                    visible: false
+                },
+                timer: 1500
+
+            })
+            if (user.nome == "") {
+                document.getElementById("nome").style.border = "solid 2px red";
+            } else {
+                document.getElementById("nome").style.border = "none";
+
+            }
+            if (user.email == "") {
+                document.getElementById("email").style.border = "solid 2px red";
+            } else {
+                document.getElementById("email").style.border = "none";
+
+            }
+            if (user.cpf == "") {
+                document.getElementById("cpf").style.border = "solid 2px red";
+            } else {
+                document.getElementById("cpf").style.border = "none";
+
+            }
+            if (user.pis == "") {
+                document.getElementById("pis").style.border = "solid 2px red";
+            } else {
+                document.getElementById("pis").style.border = "none";
+
+            }
+            if (endereco.pais == "") {
+                document.getElementById("pais").style.border = "solid 2px red";
+            } else {
+                document.getElementById("pais").style.border = "none";
+
+            }
+            if (endereco.estado == "") {
+                document.getElementById("estado").style.border = "solid 2px red";
+            } else {
+                document.getElementById("estado").style.border = "none";
+
+            }
+            if (endereco.municipio == "") {
+                document.getElementById("municipio").style.border = "solid 2px red";
+            } else {
+                document.getElementById("municipio").style.border = "none";
+
+            }
+            if (endereco.cep == "") {
+                document.getElementById("cep").style.border = "solid 2px red";
+            } else {
+                document.getElementById("cep").style.border = "none";
+
+            }
+            if (endereco.rua == "") {
+                document.getElementById("rua").style.border = "solid 2px red";
+            } else {
+                document.getElementById("rua").style.border = "none";
+
+            }
+            if (endereco.numero == "") {
+                document.getElementById("numero").style.border = "solid 2px red";
+            } else {
+                document.getElementById("numero").style.border = "none";
+
+            }
+
+        } else {
+            await getAlreadyUser(statusCode, setStatusCode, user.email, user.cpf, user.pis);
+
+            if (statusCode == 404) {
+                updateUser(router, user, endereco, password);
+            }
+        }
+    }
     {
         if (isLogged) {
             return (
@@ -69,7 +152,7 @@ export default function Main() {
                             </div>
                             <form id="formLogin" className={styles.form}>
                                 <div className={styles.formContainer}>
-        
+
                                     <div>
                                         <label>Nome completo</label>
                                         <input
@@ -84,7 +167,7 @@ export default function Main() {
                                                     return { ...prevState, nome: value.target.value }
                                                 }
                                                 )
-        
+
                                             }}
                                         />
                                     </div>
@@ -102,7 +185,7 @@ export default function Main() {
                                                     return { ...prevState, email: value.target.value }
                                                 }
                                                 )
-        
+
                                             }}
                                         />
                                     </div>
@@ -120,7 +203,7 @@ export default function Main() {
                                                     return { ...prevState, cpf: value.target.value }
                                                 }
                                                 )
-        
+
                                             }}
                                         />
                                     </div>
@@ -138,11 +221,11 @@ export default function Main() {
                                                     return { ...prevState, pis: value.target.value }
                                                 }
                                                 )
-        
+
                                             }}
                                         />
                                     </div>
-                                    
+
                                     <div>
                                         <label>Pais</label>
                                         <input
@@ -158,7 +241,7 @@ export default function Main() {
                                                     return { ...prevState, pais: value.target.value }
                                                 }
                                                 )
-        
+
                                             }}
                                         />
                                     </div>
@@ -171,13 +254,13 @@ export default function Main() {
                                             placeholder=" Digite seu estado"
                                             required=""
                                             value={endereco.estado}
-                                            
+
                                             onChange={(value) => {
                                                 setEndereco(prevState => {
                                                     return { ...prevState, estado: value.target.value }
                                                 }
                                                 )
-        
+
                                             }}
                                         />
                                     </div>
@@ -196,7 +279,7 @@ export default function Main() {
                                                     return { ...prevState, municipio: value.target.value }
                                                 }
                                                 )
-        
+
                                             }}
                                         />
                                     </div>
@@ -215,7 +298,7 @@ export default function Main() {
                                                     return { ...prevState, cep: value.target.value }
                                                 }
                                                 )
-        
+
                                             }}
                                         />
                                     </div>
@@ -228,13 +311,13 @@ export default function Main() {
                                             placeholder=" Digite sua rua"
                                             required=""
                                             value={endereco.rua}
-                                            
+
                                             onChange={(value) => {
                                                 setEndereco(prevState => {
                                                     return { ...prevState, rua: value.target.value }
                                                 }
                                                 )
-        
+
                                             }}
                                         />
                                     </div>
@@ -253,7 +336,7 @@ export default function Main() {
                                                     return { ...prevState, numero: value.target.value }
                                                 }
                                                 )
-        
+
                                             }}
                                         />
                                     </div>
@@ -272,31 +355,31 @@ export default function Main() {
                                                     return { ...prevState, complemento: value.target.value }
                                                 }
                                                 )
-        
+
                                             }}
                                         />
                                     </div>
                                     <div>
-                                        <button onClick={(e)=> {
+                                        <button onClick={(e) => {
                                             e.preventDefault();
                                             alter();
-                                            }} className={styles.alterPassword}>
+                                        }} className={styles.alterPassword}>
                                             Alterar senha
                                         </button>
                                         <div id='buttonAlter' className={styles.buttonAlter}>
-                                        <label>Senha</label>
-                                        <input
-                                            type="password"
-                                            id="password"
-                                            name="password"
-                                            placeholder="Digite a nova senha"
-                                            required=""
-                                            onChange={(value) => {
-                                                setPassword(value.target.value);        
-                                            }}
-        
-                                        />
-                                    </div>
+                                            <label>Senha</label>
+                                            <input
+                                                type="password"
+                                                id="password"
+                                                name="password"
+                                                placeholder="Digite a nova senha"
+                                                required=""
+                                                onChange={(value) => {
+                                                    setPassword(value.target.value);
+                                                }}
+
+                                            />
+                                        </div>
                                     </div>
                                     <div className={styles.buttonsForm} >
                                         <button
@@ -304,8 +387,7 @@ export default function Main() {
                                             type="submit"
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                updateUser(router, user, endereco, password);
-                                                
+                                                setEnable();
                                             }}
                                         >Salvar</button>
                                         <button
@@ -313,14 +395,14 @@ export default function Main() {
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 isDelete();
-                                                
+
                                             }}
                                         >Apagar conta</button>
                                     </div>
-                                    
+
                                 </div>
                             </form>
-        
+
                         </div>
                     </section>
                 </div>
@@ -328,7 +410,7 @@ export default function Main() {
         } else {
             if (localStorage.getItem("currentUser")) {
                 localStorage.removeItem("currentUser");
-             }
+            }
             return <div></div>
         }
     }

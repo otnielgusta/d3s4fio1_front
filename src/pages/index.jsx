@@ -1,9 +1,10 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import styles from '../styles/Home.module.scss'
 import { UserContext, UserContextProvider } from '../contexts/userContext';
 import { useRouter } from 'next/router';
 import { login } from '../controller/userController';
 import Link from 'next/link';
+import swal from 'sweetalert';
 
 export default function Home() {
 
@@ -13,13 +14,43 @@ export default function Home() {
   const [senha, setSenha] = useState('');
   const [option, setOption] = useState('E-Mail');
 
+  async function setEnable() {
+    if (usuario == "" || senha == "") {
+      await swal({
+        title: "Preencha todos os campos!",
+        text: " ",
+        icon: "warning",
+        buttons: {
+          visible: false
+        },
+        timer: 1500
+
+      })
+      if (usuario == "") {
+        document.getElementById("login").style.border = "solid 2px red";
+      } else {
+        document.getElementById("login").style.border = "none";
+
+      }
+      if (senha == "") {
+        document.getElementById("password").style.border = "solid 2px red";
+      } else {
+        document.getElementById("password").style.border = "none";
+
+      }
+    } else {
+      login(router, usuario, senha, option);
+
+    }
+  }
+
 
   return (
     <div className={styles.body}>
       <header className={styles.header}>
         <div className={styles.containerHeader}>
           <h1>Olá, visitante</h1>
-         
+
         </div>
 
       </header>
@@ -34,7 +65,7 @@ export default function Home() {
 
               <div className={styles.usuario}>
                 <label>PIS, CPF ou e-mail</label>
-                <select onChange={(value)=>setOption(value.target.value)} >
+                <select onChange={(value) => setOption(value.target.value)} >
                   <option>E-Mail</option>
                   <option>CPF</option>
                   <option>PIS</option>
@@ -68,16 +99,18 @@ export default function Home() {
               <div>
                 <button
                   className={styles.button}
+                  id="buttonSubmit"
                   type="submit"
                   onClick={(e) => {
                     e.preventDefault();
-                    login(router, usuario, senha, option);
+                    setEnable()
+
                   }}
                 >Logar</button>
               </div>
-              <p>Novo por aqui? 
+              <p>Novo por aqui?
                 <Link href={'/register'}>
-                  { " cadastre-se"}
+                  {" cadastre-se"}
                 </Link>
               </p>
             </div>

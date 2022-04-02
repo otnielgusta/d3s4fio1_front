@@ -1,33 +1,34 @@
 @import './variables';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-.body{
-    
+.body {
+
     position: relative;
-    background: linear-gradient(116.77deg,  $backgroundGradient1  -46.19%,  $backgroundGradient2 100%);
+    background: linear-gradient(116.77deg, $backgroundGradient1 -46.19%, $backgroundGradient2 100%);
     color: var(--backgoundLight);
     height: 100vh;
-      
+
 }
 
-.header{
-    padding: 2rem 10rem; 
+.header {
+    padding: 2rem 10rem;
     color: white;
 
-    .containerHeader{
+    .containerHeader {
         margin: 0px;
     }
-    h1{
+
+    h1 {
         font-size: 28px;
         font-weight: 600;
         margin: 0px;
     }
-   
+
 
 }
 
 
-.sectionLogin{
+.sectionLogin {
     position: absolute;
     top: 50%;
     left: 0;
@@ -45,9 +46,9 @@
     border-top: 5px solid $backgroundGradient2;
 
 
-    .headerLogin{
+    .headerLogin {
 
-        h2 {            
+        h2 {
             text-align: center;
             margin-bottom: 20px;
         }
@@ -60,38 +61,41 @@
     display: flex;
     color: #fff;
 
-    
 
-    div{
+
+    div {
         width: 60%;
         display: flex;
         flex-direction: column;
     }
-    .usuario{
-        select{
-  font-family: 'Inter', sans-serif;
 
-        margin-bottom: 10px;
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 20px;
-        padding-right: 20px;
-        border: none;
-        width: 314px;
-        height: 40px;
-        background: backgoundLight;
-        /* box-shadow: 0px 4px 4px rgb(0 0 0 / 25%); */
-        border-radius: 4px;
+    .usuario {
+        select {
+            font-family: 'Inter', sans-serif;
+
+            margin-bottom: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 20px;
+            padding-right: 20px;
+            border: none;
+            width: 314px;
+            height: 40px;
+            background: backgoundLight;
+            /* box-shadow: 0px 4px 4px rgb(0 0 0 / 25%); */
+            border-radius: 4px;
         }
+
         label {
             padding-bottom: 3px;
         }
     }
-    label{
+
+    label {
         font-weight: 500;
     }
 
-    button{
+    button {
 
         margin-left: auto;
         margin-right: auto;
@@ -124,35 +128,30 @@
         background: backgoundLight;
         /* box-shadow: 0px 4px 4px rgb(0 0 0 / 25%); */
         border-radius: 4px;
-        }
-        label {
-            padding-bottom: 3px;
     }
 
-    input::placeholder { 
-        color: rgb(146, 146, 146);
-        opacity: 1; 
+    label {
+        padding-bottom: 3px;
     }
-    input::-ms-input-placeholder { 
+
+    input::placeholder {
         color: rgb(146, 146, 146);
-        opacity: 1; 
+        opacity: 1;
     }
-    
-    p, a{
+
+    input::-ms-input-placeholder {
+        color: rgb(146, 146, 146);
+        opacity: 1;
+    }
+
+    p,
+    a {
         font-size: 14px;
     }
-    
-    a{
+
+    a {
         text-decoration: none;
         color: $backgroundGradient1;
         font-weight: bold;
     }
 }
-
-
-
-
-
-
-
-
