@@ -1,12 +1,12 @@
 export class UserClass{
-    static currentUser = {} 
+    static statusCode = {} 
 
-    static setCurrentUser(user){        
-        this.currentUser = user;
+    static setStatusCode(status){        
+        this.statusCode = status;
     }
 
     getCurrentUse(){
-        return this.currentUser;
+        return this.statusCode;
     }
     
 

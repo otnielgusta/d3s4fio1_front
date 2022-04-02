@@ -1,5 +1,6 @@
 import cookie from 'js-cookie';
 import swal from 'sweetalert';
+import { UserClass } from './userClass';
 
 module.exports = {
 
@@ -318,12 +319,13 @@ module.exports = {
     }
   },
 
-  async getAlreadyUser(statusCode, setStatusCode, email, cpf, pis) {
+  async getAlreadyUser(email, cpf, pis) {
     var body = {
       email: email,
       cpf: cpf,
       pis: pis
     };
+    console.log(body)
 
     let config = {
       method: 'POST',
@@ -336,12 +338,12 @@ module.exports = {
 
     await fetch("http://127.0.0.1:5000/login/already", config)
       .then((response) => {
-        setStatusCode(response.status)
-        console.log(statusCode)
+        UserClass.setStatusCode(response.status)
+        //setStatusCode(response.status)
         return response.json();
       })
       .then((data) => {
-        if (statusCode == 200) {
+        if (UserClass.statusCode == 200) {
           swal({
             title: data.text,
             text: " ",
@@ -351,11 +353,11 @@ module.exports = {
           })
           return 200;
 
-        } else if (statusCode == 404) {
+        } else if (UserClass.statusCode == 404) {
 
           return 404;
 
-        } else if (statusCode == 401) {
+        } else if (UserClass.statusCode == 401) {
           swal({
             title: "Ocorreu um erro!",
             text: " ",

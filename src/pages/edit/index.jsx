@@ -3,30 +3,47 @@ import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/userContext";
 import { auth, updateUser, deleteUser, getAlreadyUser } from '../../controller/userController';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import Header from '../../components/headerComponent';
 import swal from 'sweetalert';
+import { UserClass } from '../../controller/userClass';
+
 
 export default function Main() {
-    const {statusCode, setStatusCode} = useContext(UserContext)
-
     const { setIsLogged, isLogged } = useContext(UserContext);
     const router = useRouter();
     const [user, setUser] = useState({});
     const [endereco, setEndereco] = useState({});
     const [alterPassword, setAlterPassword] = useState(false);
     const [password, setPassword] = useState("");
+    const [userToVerify, setUserToVerify] = useState({
+        email: "",
+        cpf: "",
+        pis: "",
+
+    });
 
     auth(router, setIsLogged);
+
+    function setToVerify(email, cpf, pis) {
+        setUserToVerify(prevState => {
+            return {
+                ...prevState,
+                email: email,
+                cpf: cpf,
+                pis: pis,
+                
+            }
+        })
+    }
 
     useEffect(() => {
         if (window.localStorage.getItem("currentUser")) {
 
             setUser(JSON.parse(window.localStorage.getItem("currentUser")));
             setEndereco(JSON.parse(window.localStorage.getItem("currentUser")).endereco);
+            setToVerify(JSON.parse(window.localStorage.getItem("currentUser")).email, JSON.parse(window.localStorage.getItem("currentUser")).cpf, JSON.parse(window.localStorage.getItem("currentUser")).pis);
 
         }
-
         document.getElementById("buttonAlter").style.display = 'none';
 
     }, [router.pathname])
@@ -57,6 +74,37 @@ export default function Main() {
             input.style.display = '';
             setAlterPassword(true);
         }
+    }
+
+    async function verifyAlreadyUser() {
+        var haveEmail = false;
+        var haveCpf = false;
+        var havePis = false;
+
+        console.log(userToVerify)
+        if (userToVerify.email != user.email || userToVerify.cpf != user.cpf || userToVerify.pis != user.pis) {
+
+            if (userToVerify.email != user.email) {
+                haveEmail = true;
+            }
+            if (userToVerify.cpf != user.cpf) {
+                haveCpf = true;
+            }
+            
+            await getAlreadyUser(
+                haveEmail ? user.email : "",
+                haveCpf ? user.cpf : "", 
+                havePis ? user.pis : ""
+            );
+            if (UserClass.statusCode == 404) {
+                console.log("entrou2")
+                updateUser(router, user, endereco, password);
+                
+            }
+        }else{
+            updateUser(router, user, endereco, password);
+        }
+
     }
 
     async function setEnable() {
@@ -133,11 +181,8 @@ export default function Main() {
             }
 
         } else {
-            await getAlreadyUser(statusCode, setStatusCode, user.email, user.cpf, user.pis);
-
-            if (statusCode == 404) {
-                updateUser(router, user, endereco, password);
-            }
+            console.log("não tem vazio");
+            verifyAlreadyUser();
         }
     }
     {

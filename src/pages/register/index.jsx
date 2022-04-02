@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useState, useContext } from 'react';
 import { register, getAlreadyUser } from '../../controller/userController'
 import { UserContext } from '../../contexts/userContext';
+import { UserClass } from '../../controller/userClass';
 
 export default function Main() {
     const {statusCode, setStatusCode} = useContext(UserContext)
@@ -105,8 +106,8 @@ export default function Main() {
 
         } else {
             await getAlreadyUser(statusCode, setStatusCode, user.email, user.cpf, user.pis);
-            
-            if (statusCode == 404) {
+            console.log(UserClass.statusCode)
+            if (UserClass.statusCode == 404) {
                 console.log("entrou")
                 register(router, user);
 
