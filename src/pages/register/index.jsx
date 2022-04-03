@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState, useContext } from 'react';
 import { register, getAlreadyUser } from '../../controller/userController'
-import { UserContext } from '../../contexts/userContext';
 import { UserClass } from '../../controller/userClass';
+import Image from 'next/image';
+
+
 
 export default function Main() {
-    const {statusCode, setStatusCode} = useContext(UserContext)
     const router = useRouter();
     const [user, setUser] = useState({
         nome: "",
@@ -24,9 +25,10 @@ export default function Main() {
         numero: "",
         complemento: "",
     })
+    const [isLoading, setIsLoading] = useState(false);
 
-    async function setEnable() {
-        if (user.nome == "" || user.email == "" || user.cpf == "" || user.pis == "" || user.pais == "" || user.estado == "" || user.municipio == "" || user.cep == "" || user.rua == "" || user.numero == "" || user.senha == "") {
+       async function setEnable() {
+        breackSetEnable: if (user.nome == "" || user.email == "" || user.cpf == "" || user.pis == "" || user.pais == "" || user.estado == "" || user.municipio == "" || user.cep == "" || user.rua == "" || user.numero == "" || user.senha == "") {
             await swal({
                 title: "Preencha todos os campos!",
                 text: " ",
@@ -105,11 +107,20 @@ export default function Main() {
             }
 
         } else {
-            await getAlreadyUser(statusCode, setStatusCode, user.email, user.cpf, user.pis);
+            if (!user.email.includes("@") ) {
+                await swal({
+                  title: "Insira um endereço de E-Mail válido!",
+                  text: "O e-mail digitado não é válido.",
+                  icon: "warning",
+                  dangerMode: true,
+                })
+                break breackSetEnable;
+              }
+            await getAlreadyUser(user.email, user.cpf, user.pis);
             console.log(UserClass.statusCode)
             if (UserClass.statusCode == 404) {
-                console.log("entrou")
-                register(router, user);
+                register(setIsLoading, router, user);
+
 
             }
         }
@@ -133,7 +144,7 @@ export default function Main() {
                         <div className={styles.formContainer}>
 
                             <div>
-                                <label>Nome completo</label>
+                                <label>Nome completo *</label>
                                 <input
                                     type="text"
                                     id="nome"
@@ -150,7 +161,7 @@ export default function Main() {
                                 />
                             </div>
                             <div>
-                                <label>Email</label>
+                                <label>Email *</label>
                                 <input
                                     type="email"
                                     id="email"
@@ -167,7 +178,7 @@ export default function Main() {
                                 />
                             </div>
                             <div>
-                                <label>CPF</label>
+                                <label>CPF *</label>
                                 <input
                                     type="number"
                                     id="cpf"
@@ -184,7 +195,7 @@ export default function Main() {
                                 />
                             </div>
                             <div>
-                                <label>PIS</label>
+                                <label>PIS *</label>
                                 <input
                                     type="number"
                                     id="pis"
@@ -201,7 +212,7 @@ export default function Main() {
                                 />
                             </div>
                             <div>
-                                <label >Senha</label>
+                                <label >Senha *</label>
                                 <input
                                     type="password"
                                     id="password"
@@ -219,7 +230,7 @@ export default function Main() {
                                 />
                             </div>
                             <div>
-                                <label>Pais</label>
+                                <label>Pais *</label>
                                 <input
                                     type="text"
                                     id="pais"
@@ -236,7 +247,7 @@ export default function Main() {
                                 />
                             </div>
                             <div>
-                                <label>Estado</label>
+                                <label>Estado *</label>
                                 <input
                                     type="text"
                                     id="estado"
@@ -253,7 +264,7 @@ export default function Main() {
                                 />
                             </div>
                             <div>
-                                <label>Município</label>
+                                <label>Município *</label>
                                 <input
                                     type="text"
                                     id="municipio"
@@ -270,7 +281,7 @@ export default function Main() {
                                 />
                             </div>
                             <div>
-                                <label>CEP</label>
+                                <label>CEP *</label>
                                 <input
                                     type="number"
                                     id="cep"
@@ -287,7 +298,7 @@ export default function Main() {
                                 />
                             </div>
                             <div>
-                                <label>Rua</label>
+                                <label>Rua *</label>
                                 <input
                                     type="text"
                                     id="rua"
@@ -304,7 +315,7 @@ export default function Main() {
                                 />
                             </div>
                             <div>
-                                <label>Número</label>
+                                <label>Número *</label>
                                 <input
                                     type="number"
                                     id="numero"
@@ -345,8 +356,15 @@ export default function Main() {
                                     onClick={(e) => {
                                         e.preventDefault();
                                         setEnable();
-                                    }}
-                                >Cadastrar</button>
+                                    }}>
+                                    {isLoading ? 
+                                    <Image 
+                                        src={require('../../images/spinner2.gif')}
+                                        alt=""
+                                        width="50px"
+                                        height="50px"
+                                         /> : "Cadastrar"} 
+                                </button>
                             </div>
                             <p>
                                 <Link className={styles.linkVoltar} href={'/'}>

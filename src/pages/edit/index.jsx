@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import Header from '../../components/headerComponent';
 import swal from 'sweetalert';
 import { UserClass } from '../../controller/userClass';
-
+import Image from 'next/image';
 
 export default function Main() {
     const { setIsLogged, isLogged } = useContext(UserContext);
@@ -21,6 +21,8 @@ export default function Main() {
         pis: "",
 
     });
+    const [isLoading, setIsLoading] = useState(false);
+
 
     auth(router, setIsLogged);
 
@@ -102,13 +104,13 @@ export default function Main() {
                 
             }
         }else{
-            updateUser(router, user, endereco, password);
+            updateUser(setIsLoading, router, user, endereco, password);
         }
 
     }
 
     async function setEnable() {
-        if (user.nome == "" || user.email == "" || user.cpf == "" || user.pis == "" || endereco.pais == "" || endereco.estado == "" || endereco.municipio == "" || endereco.cep == "" || endereco.rua == "" || endereco.numero == "") {
+       breackSetEnable: if (user.nome == "" || user.email == "" || user.cpf == "" || user.pis == "" || endereco.pais == "" || endereco.estado == "" || endereco.municipio == "" || endereco.cep == "" || endereco.rua == "" || endereco.numero == "") {
             await swal({
                 title: "Preencha todos os campos!",
                 text: " ",
@@ -181,6 +183,15 @@ export default function Main() {
             }
 
         } else {
+            if (!user.email.includes("@") ) {
+                await swal({
+                  title: "Insira um endereço de E-Mail válido!",
+                  text: "O e-mail digitado não é válido.",
+                  icon: "warning",
+                  dangerMode: true,
+                })
+                break breackSetEnable;
+              }
             console.log("não tem vazio");
             verifyAlreadyUser();
         }
@@ -199,7 +210,7 @@ export default function Main() {
                                 <div className={styles.formContainer}>
 
                                     <div>
-                                        <label>Nome completo</label>
+                                        <label>Nome completo *</label>
                                         <input
                                             type="text"
                                             id="nome"
@@ -217,7 +228,7 @@ export default function Main() {
                                         />
                                     </div>
                                     <div>
-                                        <label>Email</label>
+                                        <label>Email *</label>
                                         <input
                                             type="email"
                                             id="email"
@@ -235,7 +246,7 @@ export default function Main() {
                                         />
                                     </div>
                                     <div>
-                                        <label>CPF</label>
+                                        <label>CPF *</label>
                                         <input
                                             type="number"
                                             id="cpf"
@@ -253,7 +264,7 @@ export default function Main() {
                                         />
                                     </div>
                                     <div>
-                                        <label>PIS</label>
+                                        <label>PIS *</label>
                                         <input
                                             type="number"
                                             id="pis"
@@ -272,7 +283,7 @@ export default function Main() {
                                     </div>
 
                                     <div>
-                                        <label>Pais</label>
+                                        <label>Pais *</label>
                                         <input
                                             type="text"
                                             id="pais"
@@ -291,7 +302,7 @@ export default function Main() {
                                         />
                                     </div>
                                     <div>
-                                        <label>Estado</label>
+                                        <label>Estado *</label>
                                         <input
                                             type="text"
                                             id="estado"
@@ -310,7 +321,7 @@ export default function Main() {
                                         />
                                     </div>
                                     <div>
-                                        <label>Município</label>
+                                        <label>Município *</label>
                                         <input
                                             type="text"
                                             id="municipio"
@@ -329,7 +340,7 @@ export default function Main() {
                                         />
                                     </div>
                                     <div>
-                                        <label>CEP</label>
+                                        <label>CEP *</label>
                                         <input
                                             type="number"
                                             id="cep"
@@ -348,7 +359,7 @@ export default function Main() {
                                         />
                                     </div>
                                     <div>
-                                        <label>Rua</label>
+                                        <label>Rua *</label>
                                         <input
                                             type="text"
                                             id="rua"
@@ -367,7 +378,7 @@ export default function Main() {
                                         />
                                     </div>
                                     <div>
-                                        <label>Número</label>
+                                        <label>Número *</label>
                                         <input
                                             type="number"
                                             id="numero"
@@ -434,7 +445,13 @@ export default function Main() {
                                                 e.preventDefault();
                                                 setEnable();
                                             }}
-                                        >Salvar</button>
+                                        >{isLoading ? 
+                                            <Image 
+                                                src={require('../../images/spinner2.gif')}
+                                                alt=""
+                                                width="50px"
+                                                height="50px"
+                                                 /> :"Salvar"}</button>
                                         <button
                                             className={styles.buttonDelete}
                                             onClick={(e) => {

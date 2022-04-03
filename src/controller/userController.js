@@ -4,7 +4,9 @@ import { UserClass } from './userClass';
 
 module.exports = {
 
-  async login(router, usuario, senha, option) {
+  async login(setIsLoading, router, usuario, senha, option) {
+    setIsLoading(true);
+
     var body;
     if (option == "E-Mail") {
       body = {
@@ -36,6 +38,7 @@ module.exports = {
     const response = await fetch("http://127.0.0.1:5000/auth/login", config)
 
     if (response.status == 200) {
+      
       const data = await response.json()
       cookie.set("session_token", data.token)
       localStorage.setItem("currentUser", JSON.stringify(data.user));
@@ -62,6 +65,8 @@ module.exports = {
         dangerMode: true,
       })
     }
+    setIsLoading(false);
+
 
   },
 
@@ -148,7 +153,8 @@ module.exports = {
       })
     }
   },
-  async register(router, user) {
+  async register(setIsLoading, router, user) {
+    setIsLoading(true);
     let body = {
       nome: user.nome,
       email: user.email,
@@ -177,6 +183,7 @@ module.exports = {
     const response = await fetch("http://127.0.0.1:5000/auth/register", config);
 
     if (response.status == 200) {
+
       await swal({
         title: "Cadastro realizado",
         text: " ",
@@ -192,10 +199,12 @@ module.exports = {
 
       });
     }
+    setIsLoading(false);
 
 
   },
-  async updateUser(router, user, endereco, password) {
+  async updateUser(setIsLoading, router, user, endereco, password) {
+    setIsLoading(true);
     const session_token = cookie.get("session_token");
 
     let body = {
@@ -274,6 +283,7 @@ module.exports = {
       router.reload(window.location.pathname)
     }
 
+    setIsLoading(true);
 
   },
 

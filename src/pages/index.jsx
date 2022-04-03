@@ -5,6 +5,8 @@ import { useRouter } from 'next/router';
 import { login } from '../controller/userController';
 import Link from 'next/link';
 import swal from 'sweetalert';
+import Image from 'next/image';
+
 
 export default function Home() {
 
@@ -13,9 +15,11 @@ export default function Home() {
   const [usuario, setUsuario] = useState('');
   const [senha, setSenha] = useState('');
   const [option, setOption] = useState('E-Mail');
+  const [isLoading, setIsLoading] = useState(false);
+
 
   async function setEnable() {
-    if (usuario == "" || senha == "") {
+    breackSetEnable: if (usuario == "" || senha == "") {
       await swal({
         title: "Preencha todos os campos!",
         text: " ",
@@ -39,7 +43,17 @@ export default function Home() {
 
       }
     } else {
-      login(router, usuario, senha, option);
+      if (option == "E-Mail" && !usuario.includes("@") ) {
+        await swal({
+          title: "Insira um endereço de E-Mail válido!",
+          text: "O e-mail digitado não é válido.",
+          icon: "warning",
+          dangerMode: true,
+        })
+        break breackSetEnable;
+      }
+      
+      login(setIsLoading, router, usuario, senha, option);
 
     }
   }
@@ -106,7 +120,13 @@ export default function Home() {
                     setEnable()
 
                   }}
-                >Logar</button>
+                >{ isLoading ? 
+                  <Image 
+                      src={require('../images/spinner2.gif')}
+                      alt=""
+                      width="50px"
+                      height="50px"
+                       /> :"Logar"}</button>
               </div>
               <p>Novo por aqui?
                 <Link href={'/register'}>
