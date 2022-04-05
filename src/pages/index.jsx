@@ -71,7 +71,7 @@ export default function Home() {
       <section className={styles.sectionLogin}>
         <div className={styles.containerLogin}>
           <div className={styles.headerLogin}>
-            <h2>Desafio PontoTel</h2>
+            <h2>Desafio Otniel Silva</h2>
             <h2>Login</h2>
           </div>
           <form id="formLogin" className={styles.form}>

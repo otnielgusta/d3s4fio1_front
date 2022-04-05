@@ -131,7 +131,7 @@ export default function Main() {
         <div className={styles.body}>
             <header className={styles.header}>
                 <div className={styles.containerHeader}>
-                    <h1>Desafio PontoTel</h1>
+                    <h1>Desafio Otniel Silva</h1>
                 </div>
 
             </header>
