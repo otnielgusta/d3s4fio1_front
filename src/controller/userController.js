@@ -1,5 +1,6 @@
 import cookie from 'js-cookie';
 import swal from 'sweetalert';
+import Host from '../../host';
 import { UserClass } from './userClass';
 
 module.exports = {
@@ -35,7 +36,7 @@ module.exports = {
       }
     }
 
-    const response = await fetch("http://127.0.0.1:5000/auth/login", config)
+    const response = await fetch(Host.baseUrl + "auth/login", config)
 
     if (response.status == 200) {
       
@@ -80,7 +81,7 @@ module.exports = {
         'authorization': session_token
       }
     }
-    fetch("http://127.0.0.1:5000/auth/auth", config)
+    fetch(Host.baseUrl +"auth/auth", config)
       .then(async (response) => {
         if (response.status == 200) {
           setIsLogged(true);
@@ -126,7 +127,7 @@ module.exports = {
       }
     }
 
-    const response = await fetch("http://127.0.0.1:5000/user", config)
+    const response = await fetch(Host.baseUrl +"user", config)
 
     if (response.status == 200) {
       const data = await response.json()
@@ -180,7 +181,7 @@ module.exports = {
       }
     }
 
-    const response = await fetch("http://127.0.0.1:5000/auth/register", config);
+    const response = await fetch(Host.baseUrl +"auth/register", config);
 
     if (response.status == 200) {
 
@@ -234,7 +235,7 @@ module.exports = {
       }
     }
 
-    const response = await fetch("http://127.0.0.1:5000/auth/update", config);
+    const response = await fetch(Host.baseUrl +"auth/update", config);
 
     if (response.status == 200) {
       localStorage.setItem("currentUser", JSON.stringify({
@@ -298,7 +299,7 @@ module.exports = {
       }
     }
 
-    const response = await fetch("http://127.0.0.1:5000/auth/delete", config);
+    const response = await fetch(Host.baseUrl +"auth/delete", config);
 
     if (response.status == 200) {
       await swal({
@@ -346,7 +347,7 @@ module.exports = {
       }
     }
 
-    await fetch("http://127.0.0.1:5000/login/already", config)
+    await fetch(Host.baseUrl +"login/already", config)
       .then((response) => {
         UserClass.setStatusCode(response.status)
         //setStatusCode(response.status)
