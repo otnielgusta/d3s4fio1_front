@@ -44,7 +44,7 @@ module.exports = {
       cookie.set("session_token", data.token)
       localStorage.setItem("currentUser", JSON.stringify(data.user));
 
-      router.push({
+      typeof window !== 'undefined' && router.push({
         pathname: '/main',
 
       });
@@ -93,7 +93,7 @@ module.exports = {
             icon: "warning",
             dangerMode: true,
           })
-          router.push({
+          typeof window !== 'undefined' && router.push({
             pathname: '/',
           });
 
@@ -107,7 +107,7 @@ module.exports = {
             icon: "warning",
             dangerMode: true,
           })
-          router.push({
+          typeof window !== 'undefined' && router.push({
             pathname: '/',
           });
 
@@ -195,7 +195,7 @@ module.exports = {
         },
         timer: 1500
       });
-      router.push({
+      typeof window !== 'undefined' && router.push({
         pathname: '/',
 
       });
@@ -265,7 +265,7 @@ module.exports = {
         timer: 1500
       });
 
-      router.push({
+      typeof window !== 'undefined' && router.push({
         pathname: '/main',
 
       });
@@ -281,7 +281,7 @@ module.exports = {
         },
         timer: 1500
       });
-      router.reload(window.location.pathname)
+      typeof window !== 'undefined' && router.reload(window.location.pathname)
     }
 
     setIsLoading(true);
@@ -313,7 +313,7 @@ module.exports = {
         timer: 1500
       });
       cookie.remove('session_token');
-      router.push({
+      typeof window !== 'undefined' && router.push({
         pathname: '/',
 
       });

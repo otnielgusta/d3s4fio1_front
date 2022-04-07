@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
 import styles from '../styles/Home.module.scss'
-import { UserContext, UserContextProvider } from '../contexts/userContext';
 import { useRouter } from 'next/router';
 import { login } from '../controller/userController';
 import Link from 'next/link';
